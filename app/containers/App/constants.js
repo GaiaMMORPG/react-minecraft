@@ -10,3 +10,12 @@
  */
 
 export const DEFAULT_LOCALE = 'en';
+export const START_WEBSOCKET = 'START_WEBSOCKET';
+export const STOP_WEBSOCKET = 'STOP_WEBSOCKET';
+export const SOCKET_OPENED = 'SOCKET_OPENED';
+export const REQUEST = 'REQUEST';
+export const SERVERS_LIST = 'SERVERS_LIST';
+export const SERVER_BASE_DETAIL = 'SERVER_BASE_DETAIL';
+export const SERVER_ACTIVE = 'SERVER_ACTIVE';
+export const SERVER_RUNNING = 'SERVER_RUNNING';
+export const SERVER_MONITORING = 'SERVER_MONITORING';
