@@ -14,7 +14,12 @@ import { compose } from 'redux';
 import injectReducer from 'utils/injectReducer';
 import { makeSelectConnected, makeSelectLoading, makeSelectServers, makeSelectBungee } from 'containers/App/selectors';
 import { request } from 'containers/App/actions';
+
+import ServerCard from 'components/ServerCard'
+
 import messages from './messages';
+
+
 
 export class Dashboard extends React.Component { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
@@ -43,8 +48,17 @@ export class Dashboard extends React.Component { // eslint-disable-line react/pr
   }
 
   render() {
+    let cards = [];
+    if (this.props.bungeecord) {
+      cards.push(<ServerCard key={this.props.bungeecord.slug}  server={this.props.bungeecord} />);
+    }
+    this.props.servers.forEach((server) => {
+      cards.push(<ServerCard key={server.slug} server={server} />);
+    });
+
     return (
       <div>
+        {cards}
       </div>
     );
   }

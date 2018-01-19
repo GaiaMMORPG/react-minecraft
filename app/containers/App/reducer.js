@@ -19,7 +19,8 @@ import {
   SERVER_BASE_DETAIL,
   SERVER_ACTIVE,
   SERVER_RUNNING,
-  SERVER_MONITORING
+  SERVER_MONITORING,
+  SERVER_BACKUP
 } from './constants';
 
 // The initial state of the App
@@ -84,10 +85,18 @@ function appReducer(state = initialState, action) {
     case SERVER_MONITORING:
       if (action.value.slug == state.getIn(['bungeecord', 'slug']))  {
         return state
-          .setIn(['bungeecord', 'monitoring'], action.value.monitoring);
+          .setIn(['bungeecord', 'monitoring'], fromJS(action.value.monitoring));
       } else {
         return state
-          .setIn(['servers', action.value.slug, 'monitoring'], action.value.monitoring);
+          .setIn(['servers', action.value.slug, 'monitoring'], fromJS(action.value.monitoring));
+      }
+    case SERVER_BACKUP:
+      if (action.value.slug == state.getIn(['bungeecord', 'slug']))  {
+        return state
+          .setIn(['bungeecord', 'lastBackup'], fromJS(action.value.lastBackup));
+      } else {
+        return state
+          .setIn(['servers', action.value.slug, 'lastBackup'], fromJS(action.value.lastBackup));
       }
     default:
       return state;
