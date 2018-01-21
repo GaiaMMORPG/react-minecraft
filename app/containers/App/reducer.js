@@ -20,7 +20,9 @@ import {
   SERVER_ACTIVE,
   SERVER_RUNNING,
   SERVER_MONITORING,
-  SERVER_BACKUP
+  SERVER_BACKUP,
+  SERVER_PLAYER_LOGIN,
+  SERVER_PLAYER_LOGOUT
 } from './constants';
 
 // The initial state of the App
@@ -75,11 +77,18 @@ function appReducer(state = initialState, action) {
           .setIn(['servers', action.value.slug, 'isActive'], action.value.isActive);
       }
     case SERVER_RUNNING:
+      let newState = state;
       if (action.value.slug == state.getIn(['bungeecord', 'slug']))  {
-        return state
+        if (action.value.running == 'STOPPED') {
+          newState = newState.deleteIn(['bungeecord', 'monitoring']);
+        }
+        return newState
           .setIn(['bungeecord', 'running'], action.value.running);
       } else {
-        return state
+        if (action.value.running == 'STOPPED') {
+          newState = newState.deleteIn(['servers', action.value.slug, 'monitoring']);
+        }
+        return newState
           .setIn(['servers', action.value.slug, 'running'], action.value.running);
       }
     case SERVER_MONITORING:
@@ -97,6 +106,22 @@ function appReducer(state = initialState, action) {
       } else {
         return state
           .setIn(['servers', action.value.slug, 'lastBackup'], fromJS(action.value.lastBackup));
+      }
+    case SERVER_PLAYER_LOGIN:
+      if (action.value.slug == state.getIn(['bungeecord', 'slug']))  {
+        return state
+          .setIn(['bungeecord', 'players'], state.getIn(['bungeecord', 'players']) + 1);
+      } else {
+        return state
+          .setIn(['servers', action.value.slug, 'players'], state.getIn(['servers', action.value.slug, 'players']) + 1);
+      }
+    case SERVER_PLAYER_LOGOUT:
+      if (action.value.slug == state.getIn(['bungeecord', 'slug']))  {
+        return state
+          .setIn(['bungeecord', 'players'], state.getIn(['bungeecord', 'players']) - 1);
+      } else {
+        return state
+          .setIn(['servers', action.value.slug, 'players'], state.getIn(['servers', action.value.slug, 'players']) - 1);
       }
     default:
       return state;

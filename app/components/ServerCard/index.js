@@ -8,6 +8,7 @@ import React from 'react';
 // import styled from 'styled-components';
 
 import { FormattedMessage } from 'react-intl';
+import { Link } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 
 import theme from '../../theme';
@@ -48,9 +49,10 @@ const Loading = function(props) {
   return (<LoadingContainer><LoadingAnimation /></LoadingContainer>)
 };
 
-const Card = styled.div`
+const Card = styled(Link)`
   float: left;
   width: 300px;
+  height: 300px;
   background-color: ${theme.bg};
   color: ${theme.fg};
   border-bottom: 1px solid ${theme.border};
@@ -58,6 +60,12 @@ const Card = styled.div`
   padding: 1em 1em;
   margin: 2em 2em;
   text-align: center;
+  text-decoration: none;
+
+  &:hover {
+    background-color: ${theme.bg2};
+    cursor: pointer;
+  }
 `;
 
 const H1 = styled.h1`
@@ -116,7 +124,7 @@ function Status(props) {
 function ServerCard(props) {
   if (!props.server) {
     return (
-      <Card>
+      <Card to='/dashboard'>
         <Loading />
       </Card>
     )
@@ -130,35 +138,33 @@ function ServerCard(props) {
   const write = props.server.getIn(['monitoring', 13]);
   const lastBackupDate = props.server.getIn(['lastBackup', 'date']);
   const lastBackupSize = props.server.getIn(['lastBackup', 'size']);
-
-  console.log(props.server.getIn(['monitoring', 3]))
+  const players = props.server.get('players');
 
   return (
-    <Card>
-      <H1>
-        {name !== undefined ? name : <Loading />}
-      </H1>
-      <P> ({slug !== undefined ? slug : <Loading />})</P>
+    <Card to={'/server/'+slug}>
+
+      {name !== undefined ? (<H1>{name}</H1>) : (<Loading />)}
+      {slug !== undefined ? (<P>({slug})</P>) : (<Loading />)}
 
       <FlexDiv>
         <Containerleft>
           <Status running={running} />
         </Containerleft>
         <ContainerRight>
-          <P>10 Players</P>
+          {players !== undefined? (<P>{players} Players</P>) : (<Loading />)}
         </ContainerRight>
       </FlexDiv>
       <FlexDiv>
-        {cpu !== undefined ? (<P>%CPU: {cpu}</P>) : (<Loading />) }
+        {cpu !== undefined ? (<P>%CPU: {cpu}</P>) : (<P>...</P>) }
       </FlexDiv>
       <FlexDiv>
-        {mem !== undefined? (<P>%MEM: {mem}</P>) : (<Loading />) }
+        {mem !== undefined? (<P>%MEM: {mem}</P>) : (<P>...</P>) }
       </FlexDiv>
       <FlexDiv>
-        {read !== undefined ? (<P>kB_rd/s: {read}</P>) : (<Loading />) }
+        {read !== undefined ? (<P>kB_rd/s: {read}</P>) : (<P>...</P>) }
       </FlexDiv>
       <FlexDiv>
-        {write !== undefined ? (<P>kB_wr/s: {write}</P>) : (<Loading />) }
+        {write !== undefined ? (<P>kB_wr/s: {write}</P>) : (<P>...</P>) }
       </FlexDiv>
       <FlexDiv>
         {lastBackupDate !== undefined ? (<P>last backup at {lastBackupDate} ({lastBackupSize})</P>) : (<Loading />) }

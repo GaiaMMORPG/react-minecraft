@@ -12,7 +12,7 @@
  */
 
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, withRouter } from 'react-router-dom';
 
 import { connect } from 'react-redux';
 import { compose } from 'redux';
@@ -22,6 +22,7 @@ import { createStructuredSelector } from 'reselect';
 
 import HomePage from 'containers/HomePage/Loadable';
 import Dashboard from 'containers/Dashboard/Loadable';
+import Server from 'containers/Server/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 
 import Header from 'components/Header';
@@ -50,7 +51,8 @@ export class App extends React.Component { // eslint-disable-line react/prefer-s
         <Header />
         <Switch>
           <Route exact path="/" component={HomePage} />
-          <Route exact path="/dashboard" component={Dashboard} />
+          <Route path="/dashboard" component={Dashboard} />
+          <Route path="/server/:slug" component={Server} />
           <Route component={NotFoundPage} />
         </Switch>
       </div>
@@ -78,5 +80,6 @@ const withSaga = injectSaga({ key: 'app', saga });
 export default compose(
   withReducer,
   withSaga,
+  withRouter,
   withConnect,
 )(App);
