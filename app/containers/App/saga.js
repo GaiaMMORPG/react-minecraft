@@ -38,7 +38,9 @@ function* externalListener(socketChannel) {
 export default function* wsHandling() {
   while (true) {
     const data = yield take('START_WEBSOCKET');
-    const socket = new WebSocket(`ws://localhost:3001`);
+    console.log(((window.location.protocol === "https:") ? "wss://" : "ws://") + window.location.hostname + ":3001");
+    const socket = new WebSocket(((window.location.protocol === "https:") ? "wss://" : "ws://") + window.location.hostname + ":3001");
+
     const socketChannel = yield call(watchMessages, socket);
 
     const { cancel } = yield race({
