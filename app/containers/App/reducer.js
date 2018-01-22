@@ -22,7 +22,9 @@ import {
   SERVER_MONITORING,
   SERVER_BACKUP,
   SERVER_PLAYER_LOGIN,
-  SERVER_PLAYER_LOGOUT
+  SERVER_PLAYER_LOGOUT,
+  SERVER_CONSOLE,
+  SERVER_CONSOLE_LINE
 } from './constants';
 
 // The initial state of the App
@@ -56,73 +58,44 @@ function appReducer(state = initialState, action) {
       });
       return state
         .setIn(['isLoading'], false)
-        .setIn(['bungeecord'], fromJS({slug: action.value.bungeecord}))
         .setIn(['servers'], fromJS(servers));
     case SERVER_BASE_DETAIL:
-      if (action.value.slug == state.getIn(['bungeecord', 'slug']))  {
-        return state
-          .setIn(['bungeecord'], fromJS(action.value))
-          .setIn(['bungeecord', 'isLoading'], false);
-      } else {
-        return state
-          .setIn(['servers', action.value.slug], fromJS(action.value))
-          .setIn(['servers', action.value.slug, 'isLoading'], false);
-      }
+      return state
+        .setIn(['servers', action.value.slug], fromJS(action.value))
+        .setIn(['servers', action.value.slug, 'isLoading'], false);
     case SERVER_ACTIVE:
-      if (action.value.slug == state.getIn(['bungeecord', 'slug']))  {
-        return state
-          .setIn(['bungeecord', 'isActive'], action.value.isActive);
-      } else {
-        return state
-          .setIn(['servers', action.value.slug, 'isActive'], action.value.isActive);
-      }
+      return state
+        .setIn(['servers', action.value.slug, 'isActive'], action.value.isActive);
     case SERVER_RUNNING:
       let newState = state;
-      if (action.value.slug == state.getIn(['bungeecord', 'slug']))  {
-        if (action.value.running == 'STOPPED') {
-          newState = newState.deleteIn(['bungeecord', 'monitoring']);
-        }
-        return newState
-          .setIn(['bungeecord', 'running'], action.value.running);
-      } else {
-        if (action.value.running == 'STOPPED') {
-          newState = newState.deleteIn(['servers', action.value.slug, 'monitoring']);
-        }
-        return newState
-          .setIn(['servers', action.value.slug, 'running'], action.value.running);
+      if (action.value.running == 'STOPPED') {
+        newState = newState.deleteIn(['servers', action.value.slug, 'monitoring']);
       }
+      return newState
+        .setIn(['servers', action.value.slug, 'running'], action.value.running);
     case SERVER_MONITORING:
-      if (action.value.slug == state.getIn(['bungeecord', 'slug']))  {
-        return state
-          .setIn(['bungeecord', 'monitoring'], fromJS(action.value.monitoring));
-      } else {
-        return state
-          .setIn(['servers', action.value.slug, 'monitoring'], fromJS(action.value.monitoring));
-      }
+      return state
+        .setIn(['servers', action.value.slug, 'monitoring'], fromJS(action.value.monitoring));
     case SERVER_BACKUP:
-      if (action.value.slug == state.getIn(['bungeecord', 'slug']))  {
-        return state
-          .setIn(['bungeecord', 'lastBackup'], fromJS(action.value.lastBackup));
-      } else {
-        return state
-          .setIn(['servers', action.value.slug, 'lastBackup'], fromJS(action.value.lastBackup));
-      }
+      return state
+        .setIn(['servers', action.value.slug, 'lastBackup'], fromJS(action.value.lastBackup));
     case SERVER_PLAYER_LOGIN:
-      if (action.value.slug == state.getIn(['bungeecord', 'slug']))  {
-        return state
-          .setIn(['bungeecord', 'players'], state.getIn(['bungeecord', 'players']) + 1);
-      } else {
-        return state
-          .setIn(['servers', action.value.slug, 'players'], state.getIn(['servers', action.value.slug, 'players']) + 1);
-      }
+      return state
+        .setIn(['servers', action.value.slug, 'players'], state.getIn(['servers', action.value.slug, 'players']) + 1);
     case SERVER_PLAYER_LOGOUT:
-      if (action.value.slug == state.getIn(['bungeecord', 'slug']))  {
-        return state
-          .setIn(['bungeecord', 'players'], state.getIn(['bungeecord', 'players']) - 1);
-      } else {
-        return state
-          .setIn(['servers', action.value.slug, 'players'], state.getIn(['servers', action.value.slug, 'players']) - 1);
+      return state
+        .setIn(['servers', action.value.slug, 'players'], state.getIn(['servers', action.value.slug, 'players']) - 1);
+    case SERVER_CONSOLE:
+      return state
+        .setIn(['servers', action.value.slug, 'console'], fromJS(action.value.console))
+        .setIn(['servers', action.value.slug, 'consoleLength'], action.value.length);
+    case SERVER_CONSOLE_LINE:
+      let console = state.getIn(['servers', action.value.slug, 'console']).push(action.value.line);
+      if (console.size > state.getIn(['servers', action.value.slug, 'consoleLength'])) {
+        console.shift();
       }
+      return state
+        .setIn(['servers', action.value.slug, 'console'], console);
     default:
       return state;
   }

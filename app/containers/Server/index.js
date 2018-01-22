@@ -24,8 +24,8 @@ export class Server extends React.Component { // eslint-disable-line react/prefe
       <div>
         <Tabs slug={this.props.match.params.slug} />
         <Switch>
-          <Route path={`${this.props.match.url}/console`} component={Console} />
-          <Route path={`${this.props.match.url}/backups`} component={Backups} />
+          <Route path={`/server/:slug/console`} component={Console} />
+          <Route path={`/server/:slug/backups`} component={Backups} />
         </Switch>
       </div>
     );

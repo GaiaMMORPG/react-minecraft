@@ -49,9 +49,6 @@ export class Dashboard extends React.Component { // eslint-disable-line react/pr
 
   render() {
     let cards = [];
-    if (this.props.bungeecord) {
-      cards.push(<ServerCard key={this.props.bungeecord.slug}  server={this.props.bungeecord} />);
-    }
     this.props.servers.forEach((server) => {
       cards.push(<ServerCard key={server.slug} server={server} />);
     });
@@ -72,7 +69,6 @@ const mapStateToProps = createStructuredSelector({
   connected: makeSelectConnected(),
   loading: makeSelectLoading(),
   servers: makeSelectServers(),
-  bungeecord: makeSelectBungee(),
 });
 
 function mapDispatchToProps(dispatch) {
