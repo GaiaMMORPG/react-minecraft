@@ -12,7 +12,7 @@ import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import styled from 'styled-components';
 
-import { makeSelectConnected, makeSelectConsole } from 'containers/App/selectors';
+import { makeSelectConnected, makeSelectConsole, makeSelectRunning } from 'containers/App/selectors';
 import { request } from 'containers/App/actions';
 
 import theme from '../../theme';
@@ -53,6 +53,42 @@ const Autoscroll = styled.div`
   flex: 1;
 `
 
+const Button = styled.button`
+  background-color: ${theme.bg};
+  color: ${theme.fg};
+  border: 1px solid ${theme.border};
+`
+
+const RedP = styled.p`
+  color: ${theme.red};
+  margin: 0 0;
+`
+
+const YellowP = styled.p`
+  color: ${theme.yellow};
+  margin: 0 0;
+`
+
+const GreenP = styled.p`
+  color: ${theme.green};
+  margin: 0 0;
+`
+
+function Status(props) {
+  switch(props.running) {
+    case 'STARTING':
+      return (<YellowP>STARTING</YellowP>);
+    case 'STOPPING':
+      return (<YellowP>STOPPING</YellowP>);
+    case 'STARTED':
+      return (<GreenP>RUNNING</GreenP>);
+    case 'STOPPED':
+      return (<RedP>STOPPED</RedP>);
+    default:
+      return (<p>Nothing</p>);
+  }
+}
+
 export class Console extends React.Component { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
     super(props);
@@ -66,11 +102,21 @@ export class Console extends React.Component { // eslint-disable-line react/pref
     this.handleKeyPress = this.handleKeyPress.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleCheckbox = this.handleCheckbox.bind(this);
+    this.start = this.start.bind(this);
+    this.stop = this.stop.bind(this);
+    this.restart = this.restart.bind(this);
+    this.kill = this.kill.bind(this);
   }
 
   init() {
     this.props.dispatch(request({
       requestType: 'SUBSCRIBE_SERVER_CONSOLE',
+      value: {
+        slug: this.props.match.params.slug
+      }
+    }));
+    this.props.dispatch(request({
+      requestType: 'SUBSCRIBE_SERVER_DETAIL',
       value: {
         slug: this.props.match.params.slug
       }
@@ -86,6 +132,12 @@ export class Console extends React.Component { // eslint-disable-line react/pref
   componentWillUnmount() {
     this.props.dispatch(request({
       requestType: 'UNSUBSCRIBE_SERVER_CONSOLE',
+      value: {
+        slug: this.props.match.params.slug
+      }
+    }));
+    this.props.dispatch(request({
+      requestType: 'UNSUBSCRIBE_SERVER_DETAIL',
       value: {
         slug: this.props.match.params.slug
       }
@@ -106,6 +158,42 @@ export class Console extends React.Component { // eslint-disable-line react/pref
 
   scrollToBottom() {
     this.refs[0].scrollIntoView({ behavior: "smooth" });
+  }
+
+  start() {
+    this.props.dispatch(request({
+      requestType: 'START_SERVER',
+      value: {
+        slug: this.props.match.params.slug
+      }
+    }));
+  }
+
+  stop() {
+    this.props.dispatch(request({
+      requestType: 'STOP_SERVER',
+      value: {
+        slug: this.props.match.params.slug
+      }
+    }));
+  }
+
+  restart() {
+    this.props.dispatch(request({
+      requestType: 'RESTART_SERVER',
+      value: {
+        slug: this.props.match.params.slug
+      }
+    }));
+  }
+
+  kill() {
+    this.props.dispatch(request({
+      requestType: 'KILL_SERVER',
+      value: {
+        slug: this.props.match.params.slug
+      }
+    }));
   }
 
   handleKeyPress(event) {
@@ -158,6 +246,7 @@ export class Console extends React.Component { // eslint-disable-line react/pref
   }
 
   render() {
+    console.log(this.props);
     let lines = [];
     if (this.props.console) {
       lines = this.props.console.toJS().map((line, i) => {
@@ -182,6 +271,12 @@ export class Console extends React.Component { // eslint-disable-line react/pref
             <CheckInput type='checkbox' checked={this.state.autoscroll} onChange={this.handleCheckbox} />
           </Autoscroll>
         </FlexDiv>
+
+        <Button onClick={this.start}>Start</Button>
+        <Button onClick={this.stop}>Stop</Button>
+        <Button onClick={this.restart}>Restart</Button>
+        <Button onClick={this.kill}>Kill</Button>
+        <Status running={this.props.running} />
       </div>
     );
   }
@@ -201,6 +296,7 @@ function mapDispatchToProps(dispatch) {
 const mapStateToProps = createStructuredSelector({
   connected: makeSelectConnected(),
   console: makeSelectConsole(),
+  running: makeSelectRunning(),
 });
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);

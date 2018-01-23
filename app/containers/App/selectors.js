@@ -24,7 +24,7 @@ const makeSelectServers = () => createSelector(
   (appState) => appState.get('servers')
 );
 
-const selectServerSlug = () => (state, ownProps) => 'bungeecord';
+const selectServerSlug = () => (state, ownProps) => ownProps.match.params.slug;
 
 const makeSelectServer = () => createSelector(
   makeSelectServers(),
@@ -37,6 +37,10 @@ const makeSelectConsole = () => createSelector(
   (server) => server ? server.get('console') : null
 );
 
+const makeSelectRunning = () => createSelector(
+  makeSelectServer(),
+  (server) => server ? server.get('running') : null
+);
 
 const makeSelectApp = () => createSelector(
   selectAppDomain,
@@ -53,4 +57,5 @@ export {
   makeSelectBungee,
   makeSelectServer,
   makeSelectConsole,
+  makeSelectRunning,
 };

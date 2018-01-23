@@ -39,18 +39,6 @@ function appReducer(state = initialState, action) {
       return state.set('isConnected', true);
     case STOP_WEBSOCKET:
       return state.set('isConnected', false);
-    case REQUEST:
-      switch(action.requestType) {
-        case 'REQUEST_SERVERS_LIST':
-          return state
-            .setIn(['isLoading'], true)
-            .setIn(['servers'], {});
-        case 'REQUEST_SERVER_DETAIL':
-          return state
-            .setIn(['servers', action.value.slug, 'isLoading'], true);
-        default:
-          return state;
-      };
     case SERVERS_LIST:
       let servers = {};
       action.value.servers.forEach((slug) => {
@@ -61,8 +49,9 @@ function appReducer(state = initialState, action) {
         .setIn(['servers'], fromJS(servers));
     case SERVER_BASE_DETAIL:
       return state
-        .setIn(['servers', action.value.slug], fromJS(action.value))
-        .setIn(['servers', action.value.slug, 'isLoading'], false);
+        .updateIn(['servers', action.value.slug], (oldMap) => {
+          return oldMap.merge(fromJS(action.value));
+        })
     case SERVER_ACTIVE:
       return state
         .setIn(['servers', action.value.slug, 'isActive'], action.value.isActive);
