@@ -13,6 +13,7 @@ import { Switch, Route, withRouter } from 'react-router-dom';
 
 import Tabs from 'components/Tabs';
 
+import AdminRoute from 'containers/AdminRoute/Loadable';
 import Console from 'containers/Console/Loadable';
 import Backups from 'containers/Backups/Loadable';
 
@@ -24,8 +25,8 @@ export class Server extends React.Component { // eslint-disable-line react/prefe
       <div>
         <Tabs slug={this.props.match.params.slug} />
         <Switch>
-          <Route path={`/server/:slug/console`} component={Console} />
-          <Route path={`/server/:slug/backups`} component={Backups} />
+          <AdminRoute path={`/server/:slug/console`} roles={['superadmin', 'admin']} component={Console} />
+          <AdminRoute path={`/server/:slug/backups`} roles={['superadmin', 'admin']} component={Backups} />
         </Switch>
       </div>
     );

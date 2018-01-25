@@ -14,6 +14,7 @@ import {
   START_WEBSOCKET,
   STOP_WEBSOCKET,
   SOCKET_OPENED,
+  AUTH,
   REQUEST,
   SERVERS_LIST,
   SERVER_BASE_DETAIL,
@@ -39,6 +40,8 @@ function appReducer(state = initialState, action) {
       return state.set('isConnected', true);
     case STOP_WEBSOCKET:
       return state.set('isConnected', false);
+    case AUTH:
+      return state.set('role', action.value.role)
     case SERVERS_LIST:
       let servers = {};
       action.value.servers.forEach((slug) => {

@@ -4,7 +4,7 @@ const theme = {
   fg: '#eeeeee',
   fg2: '#dddddd',
   border: '#111111',
-  red: '#8c0101',
+  red: '#ff0000',
   green: '#598c01',
   yellow: '#e0bb00'
 };

@@ -20,7 +20,8 @@ import injectReducer from 'utils/injectReducer';
 import injectSaga from 'utils/injectSaga';
 import { createStructuredSelector } from 'reselect';
 
-import HomePage from 'containers/HomePage/Loadable';
+import AdminRoute from 'containers/AdminRoute/Loadable';
+import Login from 'containers/Login/Loadable';
 import Dashboard from 'containers/Dashboard/Loadable';
 import Server from 'containers/Server/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
@@ -50,10 +51,11 @@ export class App extends React.Component { // eslint-disable-line react/prefer-s
       <div>
         <Header />
         <Switch>
-          <Route exact path="/" component={HomePage} />
-          <Route path="/dashboard" component={Dashboard} />
-          <Route path="/server/:slug" component={Server} />
-          <Route component={NotFoundPage} />
+          <Route path="/login" component={Login} />
+          <AdminRoute exact path="/" roles={['superadmin', 'admin']} component={Dashboard} />
+          <AdminRoute path="/dashboard" roles={['superadmin', 'admin']} component={Dashboard} />
+          <AdminRoute path="/server/:slug" roles={['superadmin', 'admin']} component={Server} />
+          <AdminRoute roles={['superadmin', 'admin']} component={NotFoundPage} />
         </Switch>
       </div>
     );

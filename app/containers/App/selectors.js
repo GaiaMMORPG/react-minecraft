@@ -14,6 +14,11 @@ const makeSelectConnected = () => createSelector(
   (appState) => appState.get('isConnected')
 );
 
+const makeSelectRole = () => createSelector(
+  selectAppDomain,
+  (appState) => appState.get('role')
+);
+
 const makeSelectLoading = () => createSelector(
   selectAppDomain,
   (appState) => appState.get('isLoading')
@@ -51,6 +56,7 @@ export default makeSelectApp;
 export {
   makeSelectLocation,
   makeSelectConnected,
+  makeSelectRole,
   makeSelectApp,
   makeSelectLoading,
   makeSelectServers,

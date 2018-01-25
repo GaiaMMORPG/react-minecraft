@@ -57,21 +57,70 @@ const Button = styled.button`
   background-color: ${theme.bg};
   color: ${theme.fg};
   border: 1px solid ${theme.border};
+  height: 2em;
+
+  &:hover {
+    background-color: ${theme.bg2};
+    cursor: pointer;
+  }
+`
+
+const FirstButton = styled.button`
+  background-color: ${theme.bg};
+  color: ${theme.fg};
+  border: 1px solid ${theme.border};
+  border-bottom-left-radius: 10px;
+  height: 2em;
+  margin-left: 20px;
+  &:hover {
+    background-color: ${theme.bg2};
+    cursor: pointer;
+  }
+`
+
+const LastButton = styled.button`
+  background-color: ${theme.bg};
+  color: ${theme.fg};
+  border: 1px solid ${theme.border};
+  border-bottom-right-radius: 10px;
+  height: 2em;
+  &:hover {
+    background-color: ${theme.bg2};
+    cursor: pointer;
+  }
 `
 
 const RedP = styled.p`
+  background-color: ${theme.bg};
   color: ${theme.red};
-  margin: 0 0;
+  margin: 0 20px;
+  padding: 0 10px;
+  float: right;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  height: 2em;
 `
 
 const YellowP = styled.p`
+  background-color: ${theme.bg};
   color: ${theme.yellow};
-  margin: 0 0;
+  margin: 0 20px;
+  padding: 0 10px;
+  float: right;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  height: 2em;
 `
 
 const GreenP = styled.p`
+  background-color: ${theme.bg};
   color: ${theme.green};
-  margin: 0 0;
+  margin: 0 20px;
+  padding: 0 10px;
+  float: right;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  height: 2em;
 `
 
 function Status(props) {
@@ -272,10 +321,10 @@ export class Console extends React.Component { // eslint-disable-line react/pref
           </Autoscroll>
         </FlexDiv>
 
-        <Button onClick={this.start}>Start</Button>
+        <FirstButton onClick={this.start}>Start</FirstButton>
         <Button onClick={this.stop}>Stop</Button>
         <Button onClick={this.restart}>Restart</Button>
-        <Button onClick={this.kill}>Kill</Button>
+        <LastButton onClick={this.kill}>Kill</LastButton>
         <Status running={this.props.running} />
       </div>
     );
