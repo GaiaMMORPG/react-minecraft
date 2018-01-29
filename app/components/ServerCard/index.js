@@ -141,7 +141,7 @@ function ServerCard(props) {
   const players = props.server.get('players');
 
   return (
-    <Card to={'/server/'+slug}>
+    <Card to={`/server/${slug}/console`}>
 
       {name !== undefined ? (<H1>{name}</H1>) : (<Loading />)}
       {slug !== undefined ? (<P>({slug})</P>) : (<Loading />)}

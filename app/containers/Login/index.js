@@ -16,7 +16,7 @@ import hex from 'crypto-js/enc-hex';
 
 import { createStructuredSelector } from 'reselect';
 
-import { makeSelectConnected, makeSelectRole } from 'containers/App/selectors';
+import { makeSelectConnected, makeSelectUsername, makeSelectRole, makeSelectToken, makeSelectAuth } from 'containers/App/selectors';
 import { request } from 'containers/App/actions';
 
 import theme from '../../theme';
@@ -85,9 +85,12 @@ export class Login extends React.Component { // eslint-disable-line react/prefer
   }
 
   render() {
-    if (this.props.role) {
-      console.log(this.props.role);
+    if (this.props.auth === 'success') {
+      localStorage.setItem('username', this.props.username);
+      localStorage.setItem('token', this.props.token);
       return (<Redirect to='/' />);
+    } else if (this.props.auth === 'failed') {
+      localStorage.setItem('token', '');
     }
     return (
       <FlexDiv>
@@ -114,7 +117,10 @@ function mapDispatchToProps(dispatch) {
 
 const mapStateToProps = createStructuredSelector({
   connected: makeSelectConnected(),
+  username: makeSelectUsername(),
   role: makeSelectRole(),
+  token: makeSelectToken(),
+  auth: makeSelectAuth(),
 });
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);

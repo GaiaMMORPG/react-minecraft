@@ -15,6 +15,9 @@ import {
   STOP_WEBSOCKET,
   SOCKET_OPENED,
   AUTH,
+  AUTH_SUCCESS,
+  AUTH_FAILED,
+  AUTH_TOKEN_FAILED,
   REQUEST,
   SERVERS_LIST,
   SERVER_BASE_DETAIL,
@@ -40,8 +43,25 @@ function appReducer(state = initialState, action) {
       return state.set('isConnected', true);
     case STOP_WEBSOCKET:
       return state.set('isConnected', false);
-    case AUTH:
-      return state.set('role', action.value.role)
+    case AUTH_SUCCESS:
+      return state
+        .set('auth', 'success')
+        .set('username', action.value.username)
+        .set('role', action.value.role)
+        .set('token', action.value.token);
+    case AUTH_TOKEN_FAILED:
+      return state.set('auth', 'token_failed');
+    case AUTH_FAILED:
+      return state.set('auth', 'failed');
+    case REQUEST:
+      switch(action.requestType) {
+        case 'AUTH':
+          return state.set('auth', 'request');
+        case 'AUTH_TOKEN':
+          return state.set('auth', 'request_token');
+        default:
+          return state;
+      }
     case SERVERS_LIST:
       let servers = {};
       action.value.servers.forEach((slug) => {

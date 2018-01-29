@@ -25,7 +25,7 @@ const NavBar = styled.div`
 
 const H1 = styled.h1`
   padding: 0 0;
-  margin: 0 0;
+  margin: 0 20px;
 `;
 
 const HeaderLink = styled(Link)`
@@ -37,7 +37,6 @@ const HeaderLink = styled(Link)`
   background-color: ${theme.bg};
   color: ${theme.fg};
   text-decoration: none;
-  margin-left: 1em;
   padding: 0 1em;
 
   &:hover {
@@ -51,6 +50,7 @@ function Header() {
     <NavBar>
       <H1>Gaïa</H1>
       <HeaderLink to='/dashboard'>Dashboard</HeaderLink>
+      <HeaderLink to='/settings'>Settings</HeaderLink>
     </NavBar>
   );
 }

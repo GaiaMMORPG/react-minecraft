@@ -14,9 +14,24 @@ const makeSelectConnected = () => createSelector(
   (appState) => appState.get('isConnected')
 );
 
+const makeSelectUsername = () => createSelector(
+  selectAppDomain,
+  (appState) => appState.get('username')
+);
+
 const makeSelectRole = () => createSelector(
   selectAppDomain,
   (appState) => appState.get('role')
+);
+
+const makeSelectToken = () => createSelector(
+  selectAppDomain,
+  (appState) => appState.get('token')
+);
+
+const makeSelectAuth = () => createSelector(
+  selectAppDomain,
+  (appState) => appState.get('auth')
 );
 
 const makeSelectLoading = () => createSelector(
@@ -56,7 +71,10 @@ export default makeSelectApp;
 export {
   makeSelectLocation,
   makeSelectConnected,
+  makeSelectUsername,
   makeSelectRole,
+  makeSelectToken,
+  makeSelectAuth,
   makeSelectApp,
   makeSelectLoading,
   makeSelectServers,
