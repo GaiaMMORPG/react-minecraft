@@ -96,7 +96,7 @@ export class Login extends React.Component { // eslint-disable-line react/prefer
       <FlexDiv>
         <Container>
           <Input type="text" placeholder="username" name="username"  value={this.state.username} onChange={this.handleChange} />
-          <Input type="text" placeholder="password" name="password"  value={this.state.password} onChange={this.handleChange} />
+          <Input type="password" placeholder="password" name="password"  value={this.state.password} onChange={this.handleChange} />
           <Button onClick={this.login}>Login</Button>
         </Container>
       </FlexDiv>
