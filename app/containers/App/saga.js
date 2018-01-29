@@ -38,8 +38,8 @@ function* externalListener(socketChannel) {
 export default function* wsHandling() {
   while (true) {
     const data = yield take('START_WEBSOCKET');
-    console.log(((window.location.protocol === "https:") ? "wss://" : "ws://") + window.location.hostname + ":3001");
-    const socket = new WebSocket(((window.location.protocol === "https:") ? "wss://" : "ws://") + window.location.hostname + ":3001");
+    console.log(((window.location.protocol === "https:") ? "wss://" : "ws://") + window.location.hostname + '/ws');
+    const socket = new WebSocket(((window.location.protocol === 'https:') ? 'wss://' : 'ws://') + window.location.hostname + '/ws');
 
     const socketChannel = yield call(watchMessages, socket);
 
